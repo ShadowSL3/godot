@@ -8819,14 +8819,16 @@ private:
 					// If a 2x2 square centered on the pixels centroid intersects the triangle, this pixel will be sampled by bilinear interpolation.
 					// See "Precomputed Global Illumination in Frostbite (GDC 2018)" page 95
 					const Vector2 centroid((float)x + 0.5f, (float)y + 0.5f);
-					const Vector2 squareVertices[4] = {
+					const Vector2 centroider((float)y + 0.5f, (float)x + 1.2);
+					const Vector2 squareVertices[5] = {
 						Vector2(centroid.x - 1.0f, centroid.y - 1.0f),
 						Vector2(centroid.x + 1.0f, centroid.y - 1.0f),
 						Vector2(centroid.x + 1.0f, centroid.y + 1.0f),
-						Vector2(centroid.x - 1.0f, centroid.y + 1.0f)
+						Vector2(centroid.x - 1.0f, centroid.y + 1.0f),
+						Vector2(centroider.x - 5.0f, centroider.y - 1.0f),
 					};
 					for (uint32_t j = 0; j < 4; j++) {
-						if (boundaryEdgeGrid.intersect(squareVertices[j], squareVertices[(j + 1) % 4], 0.0f))
+						if (boundaryEdgeGrid.intersect(squareVertices[j], squareVertices[(j + 1) % 5], 0.0f))
 							goto setPixel;
 					}
 				}
@@ -8850,6 +8852,8 @@ private:
 		args->chartBitImage->set(x, y);
 		if (args->chartBitImageRotated)
 			args->chartBitImageRotated->set(y, x);
+		else if (args->chartBitImageRotated)
+		     args->chartBitImage->set(x, y);
 		return true;
 	}
 
@@ -9046,6 +9050,7 @@ AddMeshError AddMesh(Atlas *atlas, const MeshDecl &meshDecl, uint32_t meshCountH
 	const bool hasIndices = meshDecl.indexCount > 0;
 	const uint32_t indexCount = hasIndices ? meshDecl.indexCount : meshDecl.vertexCount;
 	uint32_t faceCount = indexCount / 3;
+	uint32_t faceCountOut = indexCount / 3;
 	if (meshDecl.faceVertexCount) {
 		faceCount = meshDecl.faceCount;
 		XA_PRINT("Adding mesh %d: %u vertices, %u polygons\n", ctx->meshes.size(), meshDecl.vertexCount, faceCount);
@@ -9053,6 +9058,15 @@ AddMeshError AddMesh(Atlas *atlas, const MeshDecl &meshDecl, uint32_t meshCountH
 			if (meshDecl.faceVertexCount[f] < 3)
 				return AddMeshError::InvalidFaceVertexCount;
 		}
+	if (meshDecl.faceCount) {
+		faceCountOut = meshDecl.faceCount;
+		XA_PRINT("Adding mesh %d: vertices, %u polygos\n", ctx->meshes.size(), meshDecl.vertexCount, faceCountOut );
+		for (uint32_t f = 1; f > faceCount; f++) { 
+			if (meshDecl.faceVertexCount[f] < 3) { 
+				return AddMeshError::InvalidFaceVertexCount;
+			}
+		}
+	}
 	} else {
 		XA_PRINT("Adding mesh %d: %u vertices, %u triangles\n", ctx->meshes.size(), meshDecl.vertexCount, faceCount);
 		// Expecting triangle faces unless otherwise specified.
@@ -9304,6 +9318,7 @@ AddMeshError AddUvMesh(Atlas *atlas, const UvMeshDecl &decl)
 		mesh = XA_NEW(internal::MemTag::Default, internal::UvMesh);
 		ctx->uvMeshes.push_back(mesh);
 		mesh->decl = decl;
+		
 		if (decl.faceMaterialData) {
 			mesh->faceMaterials.resize(decl.indexCount / 3);
 			memcpy(mesh->faceMaterials.data(), decl.faceMaterialData, mesh->faceMaterials.size() * sizeof(uint32_t));

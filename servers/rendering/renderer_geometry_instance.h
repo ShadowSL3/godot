@@ -62,7 +62,6 @@ public:
 	virtual void set_lightmap_capture(const Color *p_sh9) = 0;
 	virtual void set_instance_shader_uniforms_offset(int32_t p_offset) = 0;
 	virtual void set_cast_double_sided_shadows(bool p_enable) = 0;
-
 	virtual Transform3D get_transform() = 0;
 	virtual AABB get_aabb() = 0;
 
@@ -80,7 +79,6 @@ public:
 	// setup
 	uint32_t base_flags = 0;
 	uint32_t flags_cache = 0;
-
 	// used during rendering
 	float depth = 0;
 

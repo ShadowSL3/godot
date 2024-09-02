@@ -169,7 +169,7 @@ void RendererCanvasCull::_attach_canvas_item_for_draw(RendererCanvasCull::Item *
 
 				//draw it?
 				RendererCanvasRender::Item::CommandRect *crect = ci->alloc_command<RendererCanvasRender::Item::CommandRect>();
-
+				
 				crect->flags = RendererCanvasRender::CANVAS_RECT_IS_GROUP; // so we can recognize it later
 				crect->rect = p_transform.affine_inverse().xform(rect_accum);
 				crect->modulate = Color(1, 1, 1, 1);
@@ -220,6 +220,7 @@ void RendererCanvasCull::_attach_canvas_item_for_draw(RendererCanvasCull::Item *
 			ci->z_final = p_z;
 
 			ci->next = nullptr;
+			
 		}
 
 		if (ci->visibility_notifier) {
