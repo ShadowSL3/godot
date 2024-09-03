@@ -43,7 +43,6 @@ public:
 	virtual ~RenderGeometryInstance() {}
 
 	virtual void _mark_dirty() = 0;
-
 	virtual void set_skeleton(RID p_skeleton) = 0;
 	virtual void set_material_override(RID p_override) = 0;
 	virtual void set_material_overlay(RID p_overlay) = 0;
@@ -62,6 +61,7 @@ public:
 	virtual void set_lightmap_capture(const Color *p_sh9) = 0;
 	virtual void set_instance_shader_uniforms_offset(int32_t p_offset) = 0;
 	virtual void set_cast_double_sided_shadows(bool p_enable) = 0;
+	virtual void set_shadow_doule_side(bool p_enable) = 0;
 	virtual Transform3D get_transform() = 0;
 	virtual AABB get_aabb() = 0;
 
@@ -121,6 +121,7 @@ public:
 		bool use_baked_light = false;
 		bool use_dynamic_gi = false;
 		bool cast_double_sided_shadows = false;
+		bool shadow_double_side = false;
 		bool dirty_dependencies = false;
 
 		DependencyTracker dependency_tracker;
@@ -144,7 +145,7 @@ public:
 	virtual void set_use_dynamic_gi(bool p_enable) override;
 	virtual void set_instance_shader_uniforms_offset(int32_t p_offset) override;
 	virtual void set_cast_double_sided_shadows(bool p_enable) override;
-
+	virtual void set_shadow_double_side(bool p_enable) override;
 	virtual Transform3D get_transform() override;
 	virtual AABB get_aabb() override;
 };

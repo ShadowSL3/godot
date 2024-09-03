@@ -34,6 +34,7 @@
 
 RID PipelineCacheRD::_generate_version(RD::VertexFormatID p_vertex_format_id, RD::FramebufferFormatID p_framebuffer_format_id, bool p_wireframe, uint32_t p_render_pass, uint32_t p_bool_specializations) {
 	RD::PipelineMultisampleState multisample_state_version = multisample_state;
+
 	multisample_state_version.sample_count = RD::get_singleton()->framebuffer_format_get_texture_samples(p_framebuffer_format_id, p_render_pass);
 
 	bool wireframe = p_wireframe;
@@ -97,6 +98,7 @@ void PipelineCacheRD::setup(RID p_shader, RD::RenderPrimitive p_primitive, const
 	blend_state = p_blend_state;
 	dynamic_state_flags = p_dynamic_state_flags;
 	base_specialization_constants = p_base_specialization_constants;
+
 }
 void PipelineCacheRD::update_specialization_constants(const Vector<RD::PipelineSpecializationConstant> &p_base_specialization_constants) {
 	base_specialization_constants = p_base_specialization_constants;

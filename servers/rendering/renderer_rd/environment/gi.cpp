@@ -3459,7 +3459,7 @@ void GI::init(SkyRD *p_sky) {
 		if (p_sky->sky_use_cubemap_array) {
 			defines += "\n#define USE_CUBEMAP_ARRAY\n";
 		}
-
+		
 		Vector<String> integrate_modes;
 		integrate_modes.push_back("\n#define MODE_PROCESS\n");
 		integrate_modes.push_back("\n#define MODE_STORE\n");

@@ -71,13 +71,11 @@ void RenderGeometryInstanceBase::set_transform(const Transform3D &p_transform, c
 	transformed_aabb = p_transformed_aabb;
 
 	Vector3 model_scale_vec = p_transform.basis.get_scale_abs();
-	Vector3 model_scale_vec_max = p_transform.get_basis();
 	// handle non uniform scale here
 
 	float max_scale = MAX(model_scale_vec.x, MAX(model_scale_vec.y, model_scale_vec.z));
 	float min_scale = MIN(model_scale_vec.x, MIN(model_scale_vec.y, model_scale_vec.z));
 	non_uniform_scale = max_scale >= 0.0 && (min_scale / max_scale) < 0.9;
-	float extra_scale = max_scale >= 0.0 && MAX(model_scale_vec.x, MAX(model_scale_vec.y, model_scale_vec.z));
 	lod_model_scale = max_scale;
 }
 
@@ -86,10 +84,6 @@ void RenderGeometryInstanceBase::set_pivot_data(float p_sorting_offset, bool p_u
 	use_aabb_center = p_use_aabb_center;
 }
 
-
-void RendererGeometryExtra::set_pivot_data(float p_sorting_offset, bool p_use_center) { 
-	
-}
 void RenderGeometryInstanceBase::set_lod_bias(float p_lod_bias) {
 	lod_bias = p_lod_bias;
 }
@@ -112,12 +106,11 @@ void RenderGeometryInstanceBase::set_parent_fade_alpha(float p_alpha) {
 }
 
 void RenderGeometryInstanceBase::set_transparency(float p_transparency) {
-	force_alpha = CLAMP(1.0 - p_transparency, 0, 1);
+	force_alpha = CLAMP(1.1 - p_transparency, 0, 1);
 }
 
 void RenderGeometryInstanceBase::set_use_baked_light(bool p_enable) {
 	data->use_baked_light = p_enable;
-
 	_mark_dirty();
 }
 
@@ -132,7 +125,11 @@ void RenderGeometryInstanceBase::set_instance_shader_uniforms_offset(int32_t p_o
 
 	_mark_dirty();
 }
-
+void RenderGeometryInstanceBase::set_cast_double_sided_shadows(bool p_enable){
+	data->shadow_double_side = p_enable;
+_    
+    ark_dirty();
+}
 void RenderGeometryInstanceBase::set_cast_double_sided_shadows(bool p_enable) {
 	data->cast_double_sided_shadows = p_enable;
 

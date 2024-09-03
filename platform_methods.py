@@ -6,11 +6,12 @@ import methods
 
 # NOTE: The multiprocessing module is not compatible with SCons due to conflict on cPickle
 
-
+# NOTE: This String Contains x86 32 bit
+# "x86_32"
 # CPU architecture options.
-architectures = ["x86_32", "x86_64", "arm32", "arm64", "rv64", "ppc32", "ppc64", "wasm32"]
+architectures = ["x86_64", "arm32", "arm64", "rv64", "ppc32", "ppc64", "wasm32"]
 architecture_aliases = {
-    "x86": "x86_32",
+    #"x86": "x86_32",
     "x64": "x86_64",
     "amd64": "x86_64",
     "armv7": "arm32",

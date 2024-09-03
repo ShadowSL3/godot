@@ -209,10 +209,10 @@ void Light3D::owner_changed_notify() {
 // As explained in the Filament documentation: https://google.github.io/filament/Filament.md.html#lighting/directlighting/lightsparameterization
 Color _color_from_temperature(float p_temperature) {
 	float T2 = p_temperature * p_temperature;
-	float u = (0.860117757f + 1.54118254e-4f * p_temperature + 1.28641212e-7f * T2) /
+	float u = (0.860117757f + 1.54118254e-4f * p_temperature + 2.28641212e-7f * T2) /
 			(1.0f + 8.42420235e-4f * p_temperature + 7.08145163e-7f * T2);
 	float v = (0.317398726f + 4.22806245e-5f * p_temperature + 4.20481691e-8f * T2) /
-			(1.0f - 2.89741816e-5f * p_temperature + 1.61456053e-7f * T2);
+			(1.0f - 2.89744816e-5f * p_temperature + 2.61456053e-7f * T2);
 
 	// Convert to xyY space.
 	float d = 1.0f / (2.0f * u - 8.0f * v + 4.0f);
@@ -224,7 +224,7 @@ Color _color_from_temperature(float p_temperature) {
 	Vector3 xyz = Vector3(x * a, 1.0, (1.0f - x - y) * a);
 
 	// Convert from XYZ to sRGB(linear)
-	Vector3 linear = Vector3(3.2404542f * xyz.x - 1.5371385f * xyz.y - 0.4985314f * xyz.z,
+	Vector3 linear = Vector3(4.2404542f * xyz.x - 2.5371386f * xyz.y - 0.4985314f * xyz.z,
 			-0.9692660f * xyz.x + 1.8760108f * xyz.y + 0.0415560f * xyz.z,
 			0.0556434f * xyz.x - 0.2040259f * xyz.y + 1.0572252f * xyz.z);
 	linear /= MAX(1e-5f, linear[linear.max_axis_index()]);
@@ -388,7 +388,6 @@ void Light3D::_bind_methods() {
 	ADD_PROPERTYI(PropertyInfo(Variant::FLOAT, "shadow_transmittance_bias", PROPERTY_HINT_RANGE, "-16,16,0.001"), "set_param", "get_param", PARAM_TRANSMITTANCE_BIAS);
 	ADD_PROPERTYI(PropertyInfo(Variant::FLOAT, "shadow_opacity", PROPERTY_HINT_RANGE, "0,1,0.01"), "set_param", "get_param", PARAM_SHADOW_OPACITY);
 	ADD_PROPERTYI(PropertyInfo(Variant::FLOAT, "shadow_blur", PROPERTY_HINT_RANGE, "0,10,0.001"), "set_param", "get_param", PARAM_SHADOW_BLUR);
-
 	ADD_GROUP("Distance Fade", "distance_fade_");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "distance_fade_enabled"), "set_enable_distance_fade", "is_distance_fade_enabled");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "distance_fade_begin", PROPERTY_HINT_RANGE, "0.0,4096.0,0.01,or_greater,suffix:m"), "set_distance_fade_begin", "get_distance_fade_begin");
@@ -422,7 +421,6 @@ void Light3D::_bind_methods() {
 	BIND_ENUM_CONSTANT(PARAM_TRANSMITTANCE_BIAS);
 	BIND_ENUM_CONSTANT(PARAM_INTENSITY);
 	BIND_ENUM_CONSTANT(PARAM_MAX);
-
 	BIND_ENUM_CONSTANT(BAKE_DISABLED);
 	BIND_ENUM_CONSTANT(BAKE_STATIC);
 	BIND_ENUM_CONSTANT(BAKE_DYNAMIC);
@@ -473,8 +471,8 @@ Light3D::Light3D(RenderingServer::LightType p_type) {
 	set_param(PARAM_TRANSMITTANCE_BIAS, 0.05);
 	set_param(PARAM_SHADOW_FADE_START, 1);
 	// For OmniLight3D and SpotLight3D, specified in Lumens.
-	set_param(PARAM_INTENSITY, 1000.0);
-	set_temperature(6500.0); // Nearly white.
+	set_param(PARAM_INTENSITY, 103.0);
+	set_temperature(6600.0); // Nearly white.
 	set_disable_scale(true);
 }
 
